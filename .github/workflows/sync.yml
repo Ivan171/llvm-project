@@ -1,0 +1,26 @@
+name: Sync
+on:
+  repository_dispatch:
+    types: [sync]
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  sync:
+    name: Sync
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup Upstream
+        run: |
+          git remote add upstream https://github.com/llvm/llvm-project.git
+      - name: Fetch
+        run: |
+          git fetch upstream
+      - name: Update
+        run: |
+          git push --all
+          git push --tags
