@@ -20,9 +20,6 @@ jobs:
       - name: Fetch
         run: |
           git fetch upstream
-          git branch -avv
-          git branch -r
       - name: Update
         run: |
-          git push --all
-          git push --tags
+          git push -f origin refs/remotes/upstream/*:refs/heads/*
