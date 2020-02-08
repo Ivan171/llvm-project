@@ -39,7 +39,7 @@ jobs:
         ref: ${{ env.BUILD_REV }}
     - name: Configure
       run: |
-        cmake -B ./build -S ./ -G Ninja `
+        cmake -B ./build -S ./llvm -G Ninja `
               -DCMAKE_INSTALL_PREFIX=install `
               -DCMAKE_C_COMPILER=clang-cl `
               -DCMAKE_CXX_COMPILER=clang-cl `
