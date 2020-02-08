@@ -61,9 +61,9 @@ jobs:
     - name: Compress
       run: |
         cd install
-        7z a -mx9 -sdel llvm-win32.7z -x!bin\clang-cpp.exe -x!bin\ld64.lld.exe `
+        7z --% a -mx9 -sdel llvm-win32.7z -x!bin\clang-cpp.exe -x!bin\ld64.lld.exe `
            -x!bin\wasm-ld.exe
-        del bin\clang-cpp.exe bin\ld64.lld.exe bin\wasm-ld.exe
+        del bin\clang-cpp.exe; del bin\ld64.lld.exe; del bin\wasm-ld.exe
     - name: Upload
       uses: actions/upload-artifact@v1
       with:
