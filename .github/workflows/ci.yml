@@ -1,0 +1,71 @@
+name: CI
+on:
+  repository_dispatch:
+    types: [build]
+
+jobs:
+  windows:
+    name: Windows
+    runs-on: windows-latest
+    steps:
+    - name: Setup Environment
+      run: |
+        # Install Scoop (package installer for Windows) and make it available in
+        # the PATH.
+        Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
+        echo "::set-env name=PATH::$env:Path"
+
+        # Export the environment variables set by vcvars32.bat, so that the
+        # other actions can use it.
+        & cmd /c 'call "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars32.bat" && set' | % {
+          $name, $value = $_ -split '='
+          echo "::set-env name=$name::$value"
+        }
+
+        if ($rev = "${{ github.event.client_payload.rev }}") {
+          echo "::set-env name=BUILD_REV::$rev"
+        } else {
+          echo "::set-env name=BUILD_REV::master"
+        }
+    - name: Install LLVM
+      run: |
+        scoop install llvm --arch 32bit
+    - name: Install Ninja
+      run: |
+        scoop install ninja
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ env.BUILD_REV }}
+    - name: Configure
+      run: |
+        cmake -B ./build -S ./ -G Ninja `
+              -DCMAKE_INSTALL_PREFIX=install `
+              -DCMAKE_C_COMPILER=clang-cl `
+              -DCMAKE_CXX_COMPILER=clang-cl `
+              -DCMAKE_LINKER=lld-link `
+              -DCMAKE_BUILD_TYPE=Release `
+              -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld" `
+              -DLLVM_USE_LINKER=lld `
+              -DLLVM_TARGETS_TO_BUILD="X86" `
+              -DLLVM_INSTALL_TOOLCHAIN_ONLY=ON `
+              -DLLVM_USE_CRT_RELEASE=MT `
+              -DLLVM_TOOLCHAIN_TOOLS="llc;llvm-ar;llvm-as;llvm-cat;llvm-cov;llvm-cvtres;llvm-cxxfilt;llvm-diff;llvm-dis;llvm-dlltool;llvm-lib;llvm-link;llvm-lto;llvm-lto2;llvm-mc;llvm-nm;llvm-objcopy;llvm-objdump;llvm-profdata;llvm-ranlib;llvm-rc;llvm-readobj;llvm-split;llvm-strings;llvm-strip;llvm-undname;opt" `
+              -DLLVM_DISTRIBUTION_COMPONENTS="clang;clang-format;clang-tidy;lld;llc;llvm-ar;llvm-as;llvm-cat;llvm-cov;llvm-cvtres;llvm-cxxfilt;llvm-diff;llvm-dis;llvm-dlltool;llvm-lib;llvm-link;llvm-lto;llvm-lto2;llvm-mc;llvm-nm;llvm-objcopy;llvm-objdump;llvm-profdata;llvm-ranlib;llvm-rc;llvm-readobj;llvm-split;llvm-strings;llvm-strip;llvm-undname;opt"
+    - name: Build
+      run: |
+        cmake --build ./build --target distribution
+    - name: Install
+      run: |
+        cmake --build ./build --target install-distribution
+    - name: Compress
+      run: |
+        cd install
+        7z a -mx9 -sdel llvm-win32.7z -x!bin\clang-cpp.exe -x!bin\ld64.lld.exe `
+           -x!bin\wasm-ld.exe
+        del bin\clang-cpp.exe bin\ld64.lld.exe bin\wasm-ld.exe
+    - name: Upload
+      uses: actions/upload-artifact@v1
+      with:
+        name: llvm-win32-${{ env.BUILD_REV }}
+        path: install
