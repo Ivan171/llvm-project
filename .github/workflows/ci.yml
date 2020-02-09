@@ -37,6 +37,13 @@ jobs:
       uses: actions/checkout@v2
       with:
         ref: ${{ env.BUILD_REV }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Sync
+      if: github.event.client_payload.sync
+      run: |
+        git remote add upstream https://github.com/llvm/llvm-project.git
+        git fetch upstream
+        git push -f origin refs/remotes/upstream/*:refs/heads/*
     - name: Configure
       run: |
         cmake -B ./build -S ./llvm -G Ninja `
@@ -61,8 +68,8 @@ jobs:
     - name: Compress
       run: |
         cd install
-        7z --% a -mx9 -sdel llvm-win32.7z -x!bin\clang-cpp.exe -x!bin\ld64.lld.exe `
-           -x!bin\wasm-ld.exe
+        7z a -mx9 -sdel llvm-win32.7z -x"!bin\clang-cpp.exe" -x"!bin\ld64.lld.exe" `
+           -x"!bin\wasm-ld.exe"
         del bin\clang-cpp.exe; del bin\ld64.lld.exe; del bin\wasm-ld.exe
     - name: Upload
       uses: actions/upload-artifact@v1
