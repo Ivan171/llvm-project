@@ -40,10 +40,11 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
     - name: Sync
       if: github.event.client_payload.sync
+      shell: bash
       run: |
-        git remote add upstream "https://github.com/llvm/llvm-project.git"
+        git remote add upstream https://github.com/llvm/llvm-project.git
         git fetch upstream
-        git push -f origin "refs/remotes/upstream/*:refs/heads/*"
+        git push -f origin refs/remotes/upstream/*:refs/heads/*
     - name: Configure
       run: |
         cmake -B ./build -S ./llvm -G Ninja `
