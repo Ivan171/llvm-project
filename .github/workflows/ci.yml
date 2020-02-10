@@ -24,8 +24,10 @@ jobs:
 
         if ($rev = "${{ github.event.client_payload.rev }}") {
           echo "::set-env name=BUILD_REV::$rev"
+          echo "::set-env name=ARTIFACT_NAME::llvm-win32-$rev"
         } else {
           echo "::set-env name=BUILD_REV::master"
+          echo "::set-env name=ARTIFACT_NAME::llvm-win32-master"
         }
     - name: Install LLVM
       run: |
@@ -40,7 +42,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
     - name: Sync
       if: github.event.client_payload.sync
-      shell: bash
+      shell: cmd
       run: |
         git remote add upstream https://github.com/llvm/llvm-project.git
         git fetch upstream
@@ -69,11 +71,11 @@ jobs:
     - name: Compress
       run: |
         cd install
-        7z a -mx9 -sdel llvm-win32.7z -x"!bin\clang-cpp.exe" -x"!bin\ld64.lld.exe" `
-           -x"!bin\wasm-ld.exe"
+        7z a -mx9 -sdel ${{ env.ARTIFACT_NAME }}.7z `
+           -x"!bin\clang-cpp.exe" -x"!bin\ld64.lld.exe" -x"!bin\wasm-ld.exe"
         del bin\clang-cpp.exe; del bin\ld64.lld.exe; del bin\wasm-ld.exe
     - name: Upload
       uses: actions/upload-artifact@v1
       with:
-        name: llvm-win32-${{ env.BUILD_REV }}
+        name: ${{ env.ARTIFACT_NAME }}
         path: install
