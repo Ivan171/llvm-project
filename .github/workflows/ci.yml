@@ -55,13 +55,13 @@ jobs:
               -DCMAKE_CXX_COMPILER=clang-cl `
               -DCMAKE_LINKER=lld-link `
               -DCMAKE_BUILD_TYPE=Release `
-              -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld" `
+              -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt;lld" `
               -DLLVM_USE_LINKER=lld `
               -DLLVM_TARGETS_TO_BUILD="X86" `
               -DLLVM_INSTALL_TOOLCHAIN_ONLY=ON `
               -DLLVM_USE_CRT_RELEASE=MT `
               -DLLVM_TOOLCHAIN_TOOLS="llc;llvm-ar;llvm-as;llvm-cat;llvm-cov;llvm-cvtres;llvm-cxxfilt;llvm-diff;llvm-dis;llvm-dlltool;llvm-lib;llvm-link;llvm-lto;llvm-lto2;llvm-mc;llvm-nm;llvm-objcopy;llvm-objdump;llvm-profdata;llvm-ranlib;llvm-rc;llvm-readobj;llvm-split;llvm-strings;llvm-strip;llvm-undname;opt" `
-              -DLLVM_DISTRIBUTION_COMPONENTS="clang;clang-format;clang-tidy;lld;llc;llvm-ar;llvm-as;llvm-cat;llvm-cov;llvm-cvtres;llvm-cxxfilt;llvm-diff;llvm-dis;llvm-dlltool;llvm-lib;llvm-link;llvm-lto;llvm-lto2;llvm-mc;llvm-nm;llvm-objcopy;llvm-objdump;llvm-profdata;llvm-ranlib;llvm-rc;llvm-readobj;llvm-split;llvm-strings;llvm-strip;llvm-undname;opt"
+              -DLLVM_DISTRIBUTION_COMPONENTS="clang;clang-format;clang-tidy;profile;lld;llc;llvm-ar;llvm-as;llvm-cat;llvm-cov;llvm-cvtres;llvm-cxxfilt;llvm-diff;llvm-dis;llvm-dlltool;llvm-lib;llvm-link;llvm-lto;llvm-lto2;llvm-mc;llvm-nm;llvm-objcopy;llvm-objdump;llvm-profdata;llvm-ranlib;llvm-rc;llvm-readobj;llvm-split;llvm-strings;llvm-strip;llvm-undname;opt"
     - name: Build
       run: |
         cmake --build ./build --target distribution
