@@ -2,8 +2,8 @@ name: Sync
 on:
   repository_dispatch:
     types: [sync]
-  schedule:
-    - cron: "0 0 * * *"
+#   schedule:
+#     - cron: "0 0 * * *"
 
 jobs:
   sync:
