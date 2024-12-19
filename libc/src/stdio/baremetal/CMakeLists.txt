@@ -20,10 +20,14 @@ add_entrypoint_object(
     libc.include.stdio
 )
 
+set(printf_srcs printf.cpp)
+if(LIBC_CONF_PRINTF_MODULAR)
+  list(APPEND printf_srcs printf_modular.cpp)
+endif()
 add_entrypoint_object(
   printf
   SRCS
-    printf.cpp
+    ${printf_srcs}
   HDRS
     ../printf.h
   DEPENDS
