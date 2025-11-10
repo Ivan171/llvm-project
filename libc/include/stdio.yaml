@@ -276,6 +276,8 @@ functions:
     arguments:
       - type: const char *__restrict
       - type: '...'
+    attributes:
+      - _LIBC_MODULAR_FORMAT_PRINTF(__printf_modular)
   - name: putc
     standards:
       - stdc
