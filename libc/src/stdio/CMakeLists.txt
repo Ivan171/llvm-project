@@ -131,10 +131,14 @@ add_entrypoint_object(
     libc.src.__support.CPP.limits
 )
 
+set(snprintf_srcs snprintf.cpp)
+if(LIBC_CONF_PRINTF_MODULAR)
+  list(APPEND snprintf_srcs snprintf_modular.cpp)
+endif()
 add_entrypoint_object(
   snprintf
   SRCS
-    snprintf.cpp
+    ${snprintf_srcs}
   HDRS
     snprintf.h
   DEPENDS

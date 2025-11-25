@@ -349,6 +349,8 @@ functions:
       - type: size_t
       - type: const char *__restrict
       - type: '...'
+    attributes:
+      - _LIBC_MODULAR_FORMAT_PRINTF(__snprintf_modular)
   - name: sprintf
     standards:
       - stdc
