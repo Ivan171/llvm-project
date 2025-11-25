@@ -86,10 +86,14 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.osutil
 )
 
+set(vprintf_srcs vprintf.cpp)
+if(LIBC_CONF_PRINTF_MODULAR)
+  list(APPEND vprintf_srcs vprintf_modular.cpp)
+endif()
 add_entrypoint_object(
   vprintf
   SRCS
-    vprintf.cpp
+    ${vprintf_srcs}
   HDRS
     ../vprintf.h
   DEPENDS
