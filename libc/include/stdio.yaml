@@ -424,6 +424,8 @@ functions:
       - type: char *__restrict
       - type: const char *__restrict
       - type: va_list
+    attributes:
+      - _LIBC_MODULAR_FORMAT_PRINTF(__vsprintf_modular)
   - name: vsscanf
     standards:
       - stdc

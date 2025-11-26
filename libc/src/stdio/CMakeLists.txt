@@ -173,10 +173,15 @@ add_entrypoint_object(
     libc.src.__support.CPP.limits
 )
 
+set(vsprintf_srcs vsprintf.cpp)
+if(LIBC_CONF_PRINTF_MODULAR)
+  list(APPEND vsprintf_srcs vsprintf_modular.cpp)
+endif()
+
 add_entrypoint_object(
   vsprintf
   SRCS
-    vsprintf.cpp
+    ${vsprintf_srcs}
   HDRS
     vsprintf.h
   DEPENDS
