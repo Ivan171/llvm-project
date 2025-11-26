@@ -203,10 +203,15 @@ add_entrypoint_object(
     libc.src.__support.CPP.limits
 )
 
+set(vasprintf_srcs vasprintf.cpp)
+if(LIBC_CONF_PRINTF_MODULAR)
+  list(APPEND vasprintf_srcs vasprintf_modular.cpp)
+endif()
+
 add_entrypoint_object(
   vasprintf
   SRCS
-    vasprintf.cpp
+    ${vasprintf_srcs}
   HDRS
     vasprintf.h
   DEPENDS

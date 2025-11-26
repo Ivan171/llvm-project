@@ -1,4 +1,4 @@
-//===-- Implementation of vasprintf -----------------------------*- C++ -*-===//
+//===-- Implementation of vasprintf_modular ---------------------*- C++ -*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -6,28 +6,23 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "src/stdio/vasprintf.h"
 #include "src/__support/CPP/limits.h"
 #include "src/__support/arg_list.h"
 #include "src/__support/libc_errno.h"
 #include "src/stdio/printf_core/core_structs.h"
 #include "src/stdio/printf_core/error_mapper.h"
 #include "src/stdio/printf_core/vasprintf_internal.h"
+#include "src/stdio/vasprintf.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, vasprintf,
+LLVM_LIBC_FUNCTION(int, __vasprintf_modular,
                    (char **__restrict ret, const char *__restrict format,
                     va_list vlist)) {
   internal::ArgList args(vlist); // This holder class allows for easier copying
                                  // and pointer semantics, as well as handling
                                  // destruction automatically.
-#ifdef LIBC_COPT_PRINTF_MODULAR
-  LIBC_INLINE_ASM(".reloc ., BFD_RELOC_NONE, __printf_float");
   auto ret_val = printf_core::vasprintf_internal<true>(ret, format, args);
-#else
-  auto ret_val = printf_core::vasprintf_internal(ret, format, args);
-#endif
   if (!ret_val.has_value()) {
     libc_errno = printf_core::internal_error_to_errno(ret_val.error());
     return -1;
