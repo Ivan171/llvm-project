@@ -31,6 +31,8 @@ functions:
       - type: char **__restrict
       - type: const char *__restrict
       - type: '...'
+    attributes:
+      - _LIBC_MODULAR_FORMAT_PRINTF(__asprintf_modular)
   - name: clearerr
     standards:
       - stdc

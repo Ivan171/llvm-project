@@ -150,10 +150,14 @@ add_entrypoint_object(
     libc.src.__support.CPP.limits
 )
 
+set(asprintf_srcs asprintf.cpp)
+if(LIBC_CONF_PRINTF_MODULAR)
+  list(APPEND asprintf_srcs asprintf_modular.cpp)
+endif()
 add_entrypoint_object(
   asprintf
   SRCS
-    asprintf.cpp
+    ${asprintf_srcs}
   HDRS
     asprintf.h
   DEPENDS
