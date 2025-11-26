@@ -116,10 +116,15 @@ add_entrypoint_object(
     libc.src.stdio.scanf_core.string_reader
 )
 
+set(sprintf_srcs sprintf.cpp)
+if(LIBC_CONF_PRINTF_MODULAR)
+  list(APPEND sprintf_srcs sprintf_modular.cpp)
+endif()
+
 add_entrypoint_object(
   sprintf
   SRCS
-    sprintf.cpp
+    ${sprintf_srcs}
   HDRS
     sprintf.h
   DEPENDS

@@ -361,6 +361,8 @@ functions:
       - type: char *__restrict
       - type: const char *__restrict
       - type: '...'
+    attributes:
+      - _LIBC_MODULAR_FORMAT_PRINTF(__sprintf_modular)
   - name: sscanf
     standards:
       - stdc
