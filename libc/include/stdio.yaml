@@ -414,6 +414,8 @@ functions:
       - type: size_t
       - type: const char *__restrict
       - type: va_list
+    attributes:
+      - _LIBC_MODULAR_FORMAT_PRINTF(__vsnprintf_modular)
   - name: vsprintf
     standards:
       - stdc
