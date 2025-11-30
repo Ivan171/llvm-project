@@ -14,7 +14,7 @@ on:
 
 jobs:
   build:
-    name: Build LLVM (${{ matrix.os }})
+    name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -30,12 +30,7 @@ jobs:
           fetch-depth: 1
           ref: ${{ inputs.branch || github.ref_name }}
 
-      - name: Build
-        run: |
-          dir
-          echo "Building branch: ${{ inputs.branch || github.ref_name }}"
-
-      # - name: Install Linux dependencies
+      # - name: Dependencies (Linux)
       #   if: matrix.os == 'ubuntu-latest'
       #   run: |
       #     sudo apt-get update
@@ -59,21 +54,19 @@ jobs:
       #     choco install ninja -y
       #     choco install cmake --installargs '"ADD_CMAKE_TO_PATH=System"' -y
 
-      # - name: Create build directory
-      #   run: mkdir build
-
       - name: Configure
         shell: bash
         run: |
-          ls -la
+          clang --version
+          clang++ --version
           cmake -B ./build -S ./llvm -G Ninja \
             -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} \
             -DCMAKE_INSTALL_PREFIX=./install \
-            -DCMAKE_C_COMPILER=clang-cl \
-            -DCMAKE_CXX_COMPILER=clang-cl \
+            -DCMAKE_C_COMPILER=clang \
+            -DCMAKE_CXX_COMPILER=clang++ \
             -DCMAKE_LINKER=lld-link \
             -DLLVM_TARGETS_TO_BUILD="X86" \
-            -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld" \
+            -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt;lld" \
             -DLLVM_USE_LINKER=lld \
             -DLLVM_INSTALL_TOOLCHAIN_ONLY=ON \
             -DLLVM_USE_CRT_RELEASE=MT \
