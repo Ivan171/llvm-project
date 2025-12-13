@@ -72,7 +72,8 @@ jobs:
             -DLLVM_INSTALL_TOOLCHAIN_ONLY=ON \
             -DLLVM_USE_CRT_RELEASE=MT \
             -DLLVM_TOOLCHAIN_TOOLS="llc;llvm-ar;llvm-as;llvm-cat;llvm-cov;llvm-cvtres;llvm-cxxfilt;llvm-diff;llvm-dis;llvm-dlltool;llvm-lib;llvm-link;llvm-lto;llvm-lto2;llvm-mc;llvm-nm;llvm-objcopy;llvm-objdump;llvm-profdata;llvm-ranlib;llvm-rc;llvm-readobj;llvm-split;llvm-strings;llvm-strip;llvm-undname;opt" \
-            -DLLVM_DISTRIBUTION_COMPONENTS="clang;clangd;clang-format;clang-tidy;clang-scan-deps;lld;profile;llc;llvm-ar;llvm-as;llvm-cat;llvm-cov;llvm-cvtres;llvm-cxxfilt;llvm-diff;llvm-dis;llvm-dlltool;llvm-lib;llvm-link;llvm-lto;llvm-lto2;llvm-mc;llvm-nm;llvm-objcopy;llvm-objdump;llvm-profdata;llvm-ranlib;llvm-rc;llvm-readobj;llvm-split;llvm-strings;llvm-strip;llvm-undname;opt" \
+            -DLLVM_RUNTIME_DISTRIBUTION_COMPONENTS="compiler-rt" \
+            -DLLVM_DISTRIBUTION_COMPONENTS="clang;clangd;clang-format;clang-tidy;clang-scan-deps;lld;llc;llvm-ar;llvm-as;llvm-cat;llvm-cov;llvm-cvtres;llvm-cxxfilt;llvm-diff;llvm-dis;llvm-dlltool;llvm-lib;llvm-link;llvm-lto;llvm-lto2;llvm-mc;llvm-nm;llvm-objcopy;llvm-objdump;llvm-profdata;llvm-ranlib;llvm-rc;llvm-readobj;llvm-split;llvm-strings;llvm-strip;llvm-undname;opt" \
 
       - name: Build
         run: |
